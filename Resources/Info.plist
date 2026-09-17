@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+    <key>CFBundleName</key>            <string>TermChat</string>
+    <key>CFBundleDisplayName</key>     <string>TermChat</string>
+    <key>CFBundleIdentifier</key>      <string>com.spencerhill.termchat</string>
+    <key>CFBundleExecutable</key>      <string>TermChat</string>
+    <key>CFBundlePackageType</key>     <string>APPL</string>
+    <key>CFBundleVersion</key>         <string>1</string>
+    <key>CFBundleShortVersionString</key><string>0.1.0</string>
+    <key>LSMinimumSystemVersion</key>  <string>14.0</string>
+    <key>LSUIElement</key>             <true/>
+    <key>LSMultipleInstancesProhibited</key><true/>
+    <key>NSAppleEventsUsageDescription</key>
+    <string>TermChat reads the front Terminal or iTerm2 session so the AI can see the output around your selection.</string>
+    <key>CFBundleURLTypes</key>
+    <array>
+        <dict>
+            <key>CFBundleURLName</key>    <string>com.spencerhill.termchat.ask</string>
+            <key>CFBundleURLSchemes</key> <array><string>termchat</string></array>
+        </dict>
+    </array>
+</dict>
+</plist>
