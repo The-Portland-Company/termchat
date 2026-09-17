@@ -20,7 +20,7 @@ final class BubblePanel: NSPanel {
         hasShadow = true
         isMovableByWindowBackground = true
         level = .floating
-        collectionBehavior = [.canJoinAllSpaces, .fullScreenAuxiliary, .transient]
+        collectionBehavior = [.moveToActiveSpace, .fullScreenAuxiliary, .transient]   // stays on the desktop it was opened on
         hidesOnDeactivate = false
         isReleasedWhenClosed = false
         becomesKeyOnlyIfNeeded = true
