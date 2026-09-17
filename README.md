@@ -14,7 +14,9 @@ Highlight text in **iTerm2** (ex. while Claude Code is running), right-click →
 scripts/install.sh
 ```
 
-Builds `build/TermChat.app`, signs it, copies it to `/Applications`, launches the menu-bar app, and adds the **💬 Ask TermChat** item to every iTerm2 profile's right-click menu (via the iTerm2 Python API; iTerm asks once to allow the connection). iTerm2 → Settings → General → Magic → "Enable Python API" must be on. First use prompts once for Automation access to iTerm2 / Terminal (reading scrollback).
+Builds `build/TermChat.app`, signs it, copies it to `/Applications`, launches the menu-bar app, and adds the **💬 Ask TermChat** item to iTerm2's right-click menu via an iTerm2 API **context-menu provider** (a background LaunchAgent). Because it is a provider and not a Smart Selection action, it appears on **right-click only** — cmd-click still selects/opens links and no keyboard binding is overridden. iTerm2 → Settings → General → Magic → "Enable Python API" must be on.
+
+**Customize the menu title:** edit `~/Library/Application Support/TermChat/config.env` (uncomment/set `TERMCHAT_MENU_TITLE="…"`) and `launchctl kickstart -k gui/$(id -u)/com.spencerhill.termchat.provider`. First use prompts once for Automation access to iTerm2 / Terminal (reading scrollback).
 
 Terminal.app: install `services/Ask TermChat.workflow` into `~/Library/Services` to get it under right-click → Services.
 
@@ -32,7 +34,8 @@ open -g "termchat://ask?text=ECONNREFUSED"
 | `Sources/TermChatCore/ClaudeCLIProvider.swift` | `claude -p … --output-format stream-json`, read-only tools |
 | `Sources/TermChatCore/TerminalContext.swift` | AppleScript scrollback + cwd readers, insert-into-terminal |
 | `Sources/TermChat/` | Menu-bar app, URL handler, bubble panel, SwiftUI chat view |
-| `scripts/iterm-context-menu.py` | Adds the right-click item to iTerm2 profiles (Smart Selection rule) |
+| `scripts/iterm-provider.py` | iTerm2 API context-menu provider — right-click-only `💬 Ask TermChat` (never fires on cmd-click, overrides no keybinding) |
+| `scripts/termchat-provider-run.sh` + `launchagents/*.plist` | LaunchAgent that keeps the provider running while iTerm2 is up |
 | `scripts/termchat-ask` | Helper the menu item runs (URL-encodes → `termchat://ask`) |
 | `services/Ask TermChat.workflow` | Optional Quick Action for Terminal.app |
 
