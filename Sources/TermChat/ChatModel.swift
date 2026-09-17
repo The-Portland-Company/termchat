@@ -37,13 +37,6 @@ final class ChatModel: ObservableObject {
     var canInsert: Bool { context.bundleID == "com.googlecode.iterm2" }
     var lastAnswer: String? { messages.last { $0.role == .assistant }?.text }
 
-    /// Opening turn: explain the selection using terminal context.
-    func start() {
-        guard !selection.isEmpty else { return }
-        send(userVisible: "Explain: \(selection.prefix(120))\(selection.count > 120 ? "…" : "")",
-             prompt: "Explain what this means and what to do about it, briefly.")
-    }
-
     func submit() {
         let q = input.trimmingCharacters(in: .whitespacesAndNewlines)
         guard !q.isEmpty, !busy else { return }

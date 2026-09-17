@@ -68,6 +68,7 @@ struct ChatView: View {
         ScrollViewReader { proxy in
             ScrollView {
                 LazyVStack(alignment: .leading, spacing: 10) {
+                    if model.messages.isEmpty { contextChip }
                     ForEach(model.messages) { m in bubble(m).id(m.id) }
                     if model.busy { ProgressView().controlSize(.small).padding(.leading, 4) }
                 }
@@ -76,6 +77,28 @@ struct ChatView: View {
             .onChange(of: model.messages.last?.text) { _ in
                 if let id = model.messages.last?.id { proxy.scrollTo(id, anchor: .bottom) }
             }
+        }
+    }
+
+    /// Shown before the first turn: the attached selection + source, so the user
+    /// sees what context is in play without a prompt being auto-submitted.
+    private var contextChip: some View {
+        VStack(alignment: .leading, spacing: 6) {
+            HStack(spacing: 6) {
+                Image(systemName: "paperclip").font(.caption2)
+                Text("Attached from \(model.context.app)").font(.caption2)
+                if let cwd = model.context.workingDir {
+                    Text("· \(cwd)").font(.caption2).lineLimit(1).truncationMode(.head)
+                }
+            }.foregroundStyle(.tertiary)
+            if !model.selection.isEmpty {
+                Text(model.selection).font(.system(.caption, design: .monospaced))
+                    .lineLimit(6).textSelection(.enabled)
+                    .frame(maxWidth: .infinity, alignment: .leading)
+                    .padding(8)
+                    .background(Color.secondary.opacity(0.12), in: RoundedRectangle(cornerRadius: 8))
+            }
+            Text("Ask a question about this below.").font(.caption2).foregroundStyle(.tertiary)
         }
     }
 
@@ -98,7 +121,7 @@ struct ChatView: View {
     private var footer: some View {
         VStack(spacing: 6) {
             HStack(spacing: 8) {
-                TextField("Ask a follow-up…", text: $model.input, axis: .vertical)
+                TextField(model.messages.isEmpty ? "Ask about the selection…" : "Ask a follow-up…", text: $model.input, axis: .vertical)
                     .textFieldStyle(.roundedBorder).lineLimit(1...4).focused($focused)
                     .onSubmit { model.submit() }
                 Button("Send") { model.submit() }

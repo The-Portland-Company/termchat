@@ -81,6 +81,8 @@ final class AppDelegate: NSObject, NSApplicationDelegate {
         let panel = BubblePanel(model: model)
         panel.present(anchor: point)
         bubble = panel
-        model.start()
+        // No auto-prompt: the bubble opens quietly with the selection attached as
+        // context; the user types their own first question. Context (selection,
+        // cwd, scrollback) is still prepended to that first turn by ChatModel.
     }
 }
