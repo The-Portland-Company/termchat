@@ -1,6 +1,6 @@
 # TermChat
 
-Highlight text in **iTerm2** or **Terminal.app** (ex. while Claude Code is running), right-click → **Services → Ask TermChat**, and a floating chat bubble opens next to the selection. It explains the selection using the last ~200 lines of terminal output and the session's working directory as context. The terminal keeps keyboard focus until you click into the bubble. ⎋ closes it.
+Highlight text in **iTerm2** (ex. while Claude Code is running), right-click → **💬 Ask TermChat** (a top-level item in iTerm's own context menu), and a floating chat bubble opens next to the selection. It explains the selection using the last ~200 lines of terminal output and the session's working directory as context. The terminal keeps keyboard focus until you click into the bubble. ⎋ closes it.
 
 - **Pointer tail** anchored to where you invoked it; drag the bubble and the tail detaches.
 - **Model / effort pickers** in the footer (Claude: fable, opus, sonnet, haiku · low → max).
@@ -14,9 +14,9 @@ Highlight text in **iTerm2** or **Terminal.app** (ex. while Claude Code is runni
 scripts/install.sh
 ```
 
-Builds `build/TermChat.app`, signs it, copies it to `/Applications`, installs the Quick Action to `~/Library/Services`, and launches the menu-bar app. First use prompts once for Automation access to iTerm2 / Terminal (reading scrollback).
+Builds `build/TermChat.app`, signs it, copies it to `/Applications`, launches the menu-bar app, and adds the **💬 Ask TermChat** item to every iTerm2 profile's right-click menu (via the iTerm2 Python API; iTerm asks once to allow the connection). iTerm2 → Settings → General → Magic → "Enable Python API" must be on. First use prompts once for Automation access to iTerm2 / Terminal (reading scrollback).
 
-Optional hotkey: System Settings → Keyboard → Keyboard Shortcuts… → Services → Text → Ask TermChat.
+Terminal.app: install `services/Ask TermChat.workflow` into `~/Library/Services` to get it under right-click → Services.
 
 ## Test without a terminal selection
 
@@ -32,7 +32,9 @@ open -g "termchat://ask?text=ECONNREFUSED"
 | `Sources/TermChatCore/ClaudeCLIProvider.swift` | `claude -p … --output-format stream-json`, read-only tools |
 | `Sources/TermChatCore/TerminalContext.swift` | AppleScript scrollback + cwd readers, insert-into-terminal |
 | `Sources/TermChat/` | Menu-bar app, URL handler, bubble panel, SwiftUI chat view |
-| `services/Ask TermChat.workflow` | The Quick Action (Service) |
+| `scripts/iterm-context-menu.py` | Adds the right-click item to iTerm2 profiles (Smart Selection rule) |
+| `scripts/termchat-ask` | Helper the menu item runs (URL-encodes → `termchat://ask`) |
+| `services/Ask TermChat.workflow` | Optional Quick Action for Terminal.app |
 
 ## Roadmap
 

@@ -1,0 +1,6 @@
+#!/bin/bash
+# Open a TermChat bubble for the given text (URL-encodes it). Used by the iTerm2 context-menu rule.
+set -euo pipefail
+V="$(printf '%s' "$*" | head -c 16384 | iconv -c -f UTF-8 -t UTF-8)"
+u=$(V="$V" osascript -l JavaScript -e 'ObjC.import("stdlib"); function run(){return encodeURIComponent($.getenv("V"))}')
+exec open -g "termchat://ask?text=$u"

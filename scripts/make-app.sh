@@ -14,6 +14,7 @@ echo "› assembling ${APP}…"
 rm -rf "$APP"; mkdir -p "$APP/Contents/MacOS" "$APP/Contents/Resources"
 cp "$BIN" "$APP/Contents/MacOS/TermChat"
 cp Resources/Info.plist "$APP/Contents/Info.plist"
+cp scripts/termchat-ask "$APP/Contents/Resources/termchat-ask"
 
 SIGN_ID="$(security find-identity -v -p codesigning 2>/dev/null | awk -F'"' '/Apple Development/{print $2; exit}')"
 [ -n "$SIGN_ID" ] || SIGN_ID="-"
